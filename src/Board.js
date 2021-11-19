@@ -79,67 +79,65 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var rowValue = this.get(rowIndex).reduce(function(prevNum, num) {
-        return prevNum + num;
-      });
-      if (rowValue > 1) {
-        return true;
+      var board = Object.values(this.attributes);
+      var specificRow = board[rowIndex];
+      var count = 0;
+
+      for (var i = 0; i < specificRow.length; i++) {
+        if (specificRow[i] === 1) {
+          count++;
+        }
       }
-      return false; // Fixed
+      return count >= 2 ? true : false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      var currentBoard = this.attributes;
-      var loopCount = currentBoard.n - 1;
-      for (let i = 0; i < loopCount; i++) {
-        if (this.hasRowConflictAt(i)) {
-          return true;
+      var board = Object.values(this.attributes);
+
+      for (var i = 0; i < board.length; i++) {
+         if (this.hasRowConflictAt(i)) {
+           return true;
+         }
         }
-      }
-      return false; // Fixed
+        return false;
     },
-
-
 
     // COLUMNS - run from top to bottom
     // --------------------------------------------------------------
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
-      var currentBoard = this.attributes;
-      var loopCount = currentBoard.n;
-      var colValue = 0;
-      for (let j = 0; j < loopCount; j++) {
-        colValue += this.get(j)[colIndex];
+      var board = Object.values(this.attributes);
+      var count = 0;
+
+      for (var i = 0; i < board.length; i++) {
+        var row = board[i];
+          if (row[colIndex] === 1) {
+            count++;
+          }
       }
-      if (colValue > 1) {
-        return true;
-      }
-      return false; // fixed
+      return count >= 2 ? true : false;
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
-      var currentBoard = this.attributes;
-      var loopCount = currentBoard.n - 1;
-      for (let i = 0; i < loopCount; i++) {
-        // i is column Index
-        if (this.hasColConflictAt(i)) {
-          return true;
+      var board = Object.values(this.attributes);
+
+      for (var i = 0; i < board.length; i++) {
+         if (this.hasColConflictAt(i)) {
+           return true;
+         }
         }
-      }
-      return false; // Fixed
+        return false;
     },
-
-
 
     // Major Diagonals - go from top-left to bottom-right
     // --------------------------------------------------------------
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
-      var result = 0;
+      var count = 0;
       var row = 0;
 
       while (majorDiagonalColumnIndexAtFirstRow < 0) {
@@ -149,16 +147,12 @@
 
       while (this._isInBounds(row, majorDiagonalColumnIndexAtFirstRow)) {
         if (this.get(row)[majorDiagonalColumnIndexAtFirstRow] === 1) {
-          result++;
+          count++;
         }
         majorDiagonalColumnIndexAtFirstRow++;
         row++;
       }
-
-      if (result > 1) {
-        return true;
-      }
-      return false;
+      return count >= 2 ? true : false;
     },
 
     // test if any major diagonals on this board contain conflicts
@@ -181,22 +175,23 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
-      var result = 0;
+      var count = 0;
       var row = 0;
+      var length = this.attributes.n;
 
-      while (minorDiagonalColumnIndexAtFirstRow > this.attributes.n - 1) {
+      while (minorDiagonalColumnIndexAtFirstRow > length - 1) {
         minorDiagonalColumnIndexAtFirstRow--;
         row++;
       }
       while (this._isInBounds(row, minorDiagonalColumnIndexAtFirstRow)) {
         if (this.get(row)[minorDiagonalColumnIndexAtFirstRow] === 1) {
-          result++;
+          count++;
         }
         minorDiagonalColumnIndexAtFirstRow--;
         row++;
       }
 
-      return result >= 2 ? true : false;
+      return count >= 2 ? true : false;
     },
 
     // test if any minor diagonals on this board contain conflicts
