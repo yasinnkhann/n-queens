@@ -157,8 +157,10 @@
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
-      for (var i = 0; i < this.attributes.n - 1; i++) {
-        for (var j = 0; j < this.attributes.n - 1; j++) {
+      var length = this.attributes.n;
+
+      for (var i = 0; i < length - 1; i++) {
+        for (var j = 0; j < length - 1; j++) {
           var index = this._getFirstRowColumnIndexForMajorDiagonalOn(i, j);
           if (this.hasMajorDiagonalConflictAt(index)) {
             return true;
